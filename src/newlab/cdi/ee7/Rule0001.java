@@ -15,6 +15,8 @@ public class Rule0001 implements Rule
 
 {
 
+    private final ErrorCode errorCode = this.getClass().getAnnotation(ErrorCodeAnnotation.class).code();
+
     @Override
     public String apply() {
         String res = "Rule 0001:";
@@ -39,7 +41,8 @@ public class Rule0001 implements Rule
     }
 
     public ErrorCode getErrorCode() {
-        return this.getClass().getAnnotation(ErrorCodeAnnotation.class).code();
+        //return this.getClass().getAnnotation(ErrorCodeAnnotation.class).code();
+        return errorCode;
     }
 
 }
