@@ -27,7 +27,7 @@ public class Rule0001 implements Rule
         }
         res+="], ";
 
-        res += "error code = " + getErrorCode().toString() +"\n";
+        res += "error code = " + getErrorCode().toString();
 
         return res;
     }

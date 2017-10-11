@@ -3,6 +3,7 @@ package newlab.cdi.ee7;
 import javax.ejb.Stateless;
 import javax.enterprise.inject.Any;
 import javax.enterprise.inject.Instance;
+import javax.enterprise.util.AnnotationLiteral;
 import javax.inject.Inject;
 import java.lang.annotation.Annotation;
 
@@ -14,7 +15,9 @@ import java.lang.annotation.Annotation;
 
 public class BeanAB implements InterfaceA  {
 
-    private final Class handlerEDClazz = getClass().getAnnotation(HandlerEDAnnotation.class).clazz();
+    private final Class<? extends Annotation> handlerEDClazz = getClass().getAnnotation(HandlerEDAnnotation.class).clazz();
+    //private final Annotation annotationEDClazz = getClass().getAnnotation(HandlerEDAnnotation.class);
+
 
     //@Inject @ED101
     //Rule rule;
@@ -32,8 +35,7 @@ public class BeanAB implements InterfaceA  {
         }
         res+="\n---\n";
 
-
-        res += "handlerEDClazz = " + handlerEDClazz.getName() + "\n";
+        res += "handlerEDClazz = " + handlerEDClazz + "\n";
 
         res +="Rules = " + rules + "\n";
         for (Rule r : rules) {
@@ -41,6 +43,7 @@ public class BeanAB implements InterfaceA  {
             res += "     result = " + r.apply() + "\n";
             res += "     applied to " + handlerEDClazz.getName() + " = " + r.isAppliedTo(handlerEDClazz);
             res += "     annotations = [ ";
+
             Annotation[] anns = r.getClass().getDeclaredAnnotations();
             for(Annotation a : anns) {
                 res += a.toString() + ", ";
@@ -54,6 +57,15 @@ public class BeanAB implements InterfaceA  {
             }
         }
 
+        //Instance<Rule> handlerRules = rules.select(Rule.class, handlerEDClazz );
+        Instance<Rule> handlerRules = rules.select(new AnnotationLiteral<ED101>() {});
+        //Instance<Rule> handlerRules = rules.select(Rule.class, );
+
+        res +="Selected rules = " + handlerRules + "\n";
+        for (Rule r : handlerRules) {
+            res += "Rule class = " + r.getClass().getName() + "\n";
+            res += "     result = " + r.apply() + "\n";
+        }
         /*
         res += "Injected Rule = " + rule.getClass().getName() + "\n Rule result = " + rule.apply() + "\n";
 
